@@ -3,9 +3,9 @@ import { Outlet } from 'react-router-dom';
 
 export default function MainLayout() {
 	return (
-		<div className="min-h-screen flex flex-col bg-gray-50">
+		<div className="min-h-screen flex flex-col">
 			{/* Header */}
-			<header className="bg-white shadow p-4 font-bold text-lg">My App</header>
+			<header className="p-4 font-bold text-lg">My App</header>
 
 			{/* Main Content */}
 			<main className="flex-1 p-4">
