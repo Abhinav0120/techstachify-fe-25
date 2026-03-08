@@ -14,6 +14,9 @@ import {
 	LayoutGrid,
 	ShoppingCart,
 	Users,
+	Sun,
+	Moon,
+	Monitor,
 } from 'lucide-react';
 import { cn } from '@/common/lib/utils';
 import { Button } from '@/common/components/ui/button';
@@ -25,6 +28,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/common/components/ui/dropdown-menu';
+import { useTheme } from '@/common/components/theme-provider';
 import { useAppDispatch, useAppSelector } from '@/common/hooks/reduxHooks';
 import { logout } from '@/modules/auth/model/authSlice';
 import { ROUTES } from '@/common/constants/routes';
@@ -51,6 +55,7 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function MainLayout() {
 	const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+	const { theme, setTheme } = useTheme();
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const user = useAppSelector((state) => state.auth.user);
@@ -134,6 +139,23 @@ export default function MainLayout() {
 								<DropdownMenuItem onSelect={() => navigate(ROUTES.PROFILE)}>
 									<User className="mr-2 size-4" />
 									Profile
+								</DropdownMenuItem>
+								<DropdownMenuSeparator />
+								<DropdownMenuLabel className="text-muted-foreground">Theme</DropdownMenuLabel>
+								<DropdownMenuItem onSelect={() => setTheme('light')}>
+									<Sun className="mr-2 size-4" />
+									Light
+									{theme === 'light' && <span className="ml-auto text-xs">✓</span>}
+								</DropdownMenuItem>
+								<DropdownMenuItem onSelect={() => setTheme('dark')}>
+									<Moon className="mr-2 size-4" />
+									Dark
+									{theme === 'dark' && <span className="ml-auto text-xs">✓</span>}
+								</DropdownMenuItem>
+								<DropdownMenuItem onSelect={() => setTheme('system')}>
+									<Monitor className="mr-2 size-4" />
+									System
+									{theme === 'system' && <span className="ml-auto text-xs">✓</span>}
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem variant="destructive" onSelect={handleLogout}>
