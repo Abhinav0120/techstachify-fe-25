@@ -10,5 +10,8 @@ export const apiPost = <T, D = unknown>(url: string, data?: D, config?: AxiosReq
 export const apiPut = <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig): Promise<T> =>
 	api.put<T>(url, data, config).then((res) => res.data);
 
+export const apiPatch = <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig): Promise<T> =>
+	api.patch<T>(url, data, config).then((res) => res.data);
+
 export const apiDelete = <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>
 	api.delete<T>(url, config).then((res) => res.data);

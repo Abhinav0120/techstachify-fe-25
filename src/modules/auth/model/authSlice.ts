@@ -13,6 +13,7 @@ export interface AuthState {
 	user: AuthUser | null;
 	loginError: string | null;
 	registerError: string | null;
+	profileError: string | null;
 }
 
 const initialState: AuthState = {
@@ -20,7 +21,15 @@ const initialState: AuthState = {
 	user: null,
 	loginError: null,
 	registerError: null,
+	profileError: null,
 };
+
+export interface UpdateProfilePayload {
+	name?: string;
+	email?: string;
+	currentPassword?: string;
+	newPassword?: string;
+}
 
 const authSlice = createSlice({
 	name: 'auth',
@@ -55,14 +64,38 @@ const authSlice = createSlice({
 			state.user = null;
 			state.loginError = null;
 			state.registerError = null;
+			state.profileError = null;
 		},
 		setUser: (state, action: PayloadAction<AuthUser>) => {
 			state.user = action.payload;
 			state.isAuthenticated = true;
 		},
+		updateProfileRequest: (
+			state,
+			_action: PayloadAction<UpdateProfilePayload> // eslint-disable-line @typescript-eslint/no-unused-vars
+		) => {
+			state.profileError = null;
+		},
+		updateProfileSuccess: (state, action: PayloadAction<AuthUser>) => {
+			state.user = action.payload;
+			state.profileError = null;
+		},
+		updateProfileFailure: (state, action: PayloadAction<string>) => {
+			state.profileError = action.payload;
+		},
 	},
 });
 
-export const { loginRequest, loginSuccess, loginFailure, registerRequest, registerFailure, logout, setUser } =
-	authSlice.actions;
+export const {
+	loginRequest,
+	loginSuccess,
+	loginFailure,
+	registerRequest,
+	registerFailure,
+	logout,
+	setUser,
+	updateProfileRequest,
+	updateProfileSuccess,
+	updateProfileFailure,
+} = authSlice.actions;
 export default authSlice.reducer;

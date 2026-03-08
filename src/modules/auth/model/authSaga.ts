@@ -1,8 +1,18 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
-import { apiPost } from '@/common/lib/apiHelpers';
+import { apiPost, apiPatch } from '@/common/lib/apiHelpers';
 import { API_PATHS } from '@/common/constants/routes';
 import type { AuthUser } from './authSlice';
-import { loginRequest, loginSuccess, loginFailure, registerRequest, registerFailure, logout } from './authSlice';
+import {
+	loginRequest,
+	loginSuccess,
+	loginFailure,
+	registerRequest,
+	registerFailure,
+	logout,
+	updateProfileRequest,
+	updateProfileSuccess,
+	updateProfileFailure,
+} from './authSlice';
 
 interface LoginResponse {
 	user: AuthUser;
@@ -66,8 +76,27 @@ function* handleLogout() {
 	yield undefined;
 }
 
+function getErrorMessage(err: unknown, fallback: string): string {
+	return err &&
+		typeof err === 'object' &&
+		'response' in err &&
+		typeof (err as { response?: { data?: { message?: string } } }).response?.data?.message === 'string'
+		? (err as { response: { data: { message: string } } }).response.data.message
+		: fallback;
+}
+
+function* handleUpdateProfile(action: ReturnType<typeof updateProfileRequest>) {
+	try {
+		const data: AuthUser = yield call(apiPatch<AuthUser>, API_PATHS.AUTH.PROFILE, action.payload);
+		yield put(updateProfileSuccess(data));
+	} catch (err: unknown) {
+		yield put(updateProfileFailure(getErrorMessage(err, 'Profile update failed')));
+	}
+}
+
 export function* authSaga() {
 	yield takeLatest(loginRequest.match, handleLogin);
 	yield takeLatest(registerRequest.match, handleRegister);
 	yield takeLatest(logout.match, handleLogout);
+	yield takeLatest(updateProfileRequest.match, handleUpdateProfile);
 }

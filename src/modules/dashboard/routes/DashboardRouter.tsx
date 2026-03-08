@@ -6,7 +6,11 @@ import { ExtendedStore } from '@/app/type';
 
 const reducerKey = 'dashboard';
 const Dashboard = lazy(() => import('@/modules/dashboard/pages/Dashboard'));
+const ProfilePage = lazy(() => import('@/modules/dashboard/pages/ProfilePage'));
+const AdminPage = lazy(() => import('@/modules/dashboard/pages/AdminPage'));
+const ComingSoonPage = lazy(() => import('@/modules/dashboard/pages/ComingSoonPage'));
 const PrivateRoute = lazy(() => import('@/routes/PrivateRoute'));
+const AdminRoute = lazy(() => import('@/routes/AdminRoute'));
 const MainLayout = lazy(() => import('@/layouts/MainLayout'));
 
 const DashboardRouter = () => {
@@ -14,7 +18,6 @@ const DashboardRouter = () => {
 		const reducerManager = (store as ExtendedStore).reducerManager;
 		if (!reducerManager.reducers?.[reducerKey]) {
 			reducerManager.add(reducerKey, dashboardReducer);
-			console.log('✅ Dashboard reducer injected!');
 		}
 	}, []);
 
@@ -23,6 +26,45 @@ const DashboardRouter = () => {
 			<Route element={<PrivateRoute />}>
 				<Route element={<MainLayout />}>
 					<Route path="" element={<Dashboard />} />
+					<Route path="profile" element={<ProfilePage />} />
+					<Route element={<AdminRoute />}>
+						<Route path="admin" element={<AdminPage />} />
+					</Route>
+					<Route
+						path="chat"
+						element={<ComingSoonPage title="Chatbot" description="AI-powered chat. Coming soon." />}
+					/>
+					<Route
+						path="expenses"
+						element={
+							<ComingSoonPage
+								title="Expense Tracker"
+								description="Track spending with charts. Coming soon."
+							/>
+						}
+					/>
+					<Route
+						path="kanban"
+						element={<ComingSoonPage title="Kanban Board" description="Project management. Coming soon." />}
+					/>
+					<Route
+						path="shop"
+						element={
+							<ComingSoonPage
+								title="E-commerce"
+								description="Product catalog and payments. Coming soon."
+							/>
+						}
+					/>
+					<Route
+						path="social"
+						element={
+							<ComingSoonPage
+								title="Social Dashboard"
+								description="Posts, comments, and notifications. Coming soon."
+							/>
+						}
+					/>
 				</Route>
 			</Route>
 		</Routes>

@@ -15,6 +15,8 @@ export const ROUTES = {
 		REGISTER_SEGMENT: 'register',
 	},
 	DASHBOARD: '/dashboard',
+	PROFILE: '/dashboard/profile',
+	ADMIN: '/dashboard/admin',
 } as const;
 
 // ---- API path segments (relative to API base URL) ----
@@ -23,6 +25,7 @@ export const API_PATHS = {
 		LOGIN: '/auth/login',
 		REGISTER: '/auth/register',
 		ME: '/auth/me',
+		PROFILE: '/auth/profile',
 	},
 } as const;
 
