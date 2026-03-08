@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,9 +9,11 @@ import { Input } from '@/common/components/ui/input';
 import { Button } from '@/common/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/common/components/ui/card';
 import { cn } from '@/common/lib/utils';
-import { useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '@/common/hooks/reduxHooks';
+import { registerRequest } from '../model/authSlice';
+import { ROUTES } from '@/common/constants/routes';
 
-// 1. Define Zod schema
 const registerSchema = z
 	.object({
 		fullName: z.string().min(2, { message: 'Full name is required' }),
@@ -26,8 +29,10 @@ const registerSchema = z
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm({ className, ...props }: React.ComponentProps<'div'>) {
-
-    const navigate = useNavigate();
+	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
+	const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+	const registerError = useAppSelector((state) => state.auth.registerError);
 
 	const form = useForm<RegisterFormValues>({
 		resolver: zodResolver(registerSchema),
@@ -39,9 +44,20 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
 		},
 	});
 
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate(ROUTES.DASHBOARD);
+		}
+	}, [isAuthenticated, navigate]);
+
 	const onSubmit = (data: RegisterFormValues) => {
-		console.log('Registration Data:', data);
-		// 🔐 Call your register API or Redux-Saga here
+		dispatch(
+			registerRequest({
+				email: data.email,
+				password: data.password,
+				name: data.fullName,
+			})
+		);
 	};
 
 	return (
@@ -54,7 +70,11 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
 				<CardContent>
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-							{/* Full Name */}
+							{registerError && (
+								<p className="text-sm text-destructive" role="alert">
+									{registerError}
+								</p>
+							)}
 							<FormField
 								control={form.control}
 								name="fullName"
@@ -68,8 +88,6 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
 									</FormItem>
 								)}
 							/>
-
-							{/* Email */}
 							<FormField
 								control={form.control}
 								name="email"
@@ -83,8 +101,6 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
 									</FormItem>
 								)}
 							/>
-
-							{/* Password */}
 							<FormField
 								control={form.control}
 								name="password"
@@ -98,8 +114,6 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
 									</FormItem>
 								)}
 							/>
-
-							{/* Confirm Password */}
 							<FormField
 								control={form.control}
 								name="confirmPassword"
@@ -113,18 +127,19 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
 									</FormItem>
 								)}
 							/>
-
-							{/* Submit */}
 							<Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
 								{form.formState.isSubmitting ? 'Creating Account...' : 'Register'}
 							</Button>
-
-							{/* Login Redirect */}
 							<div className="mt-4 text-center text-sm">
 								Already have an account?{' '}
-								<Button type="button" variant="link" className='pl-0 cursor-pointer' onClick={() => navigate("/auth/login")}>
-                                    Login
-                                </Button>
+								<Button
+									type="button"
+									variant="link"
+									className="pl-0 cursor-pointer"
+									onClick={() => navigate(ROUTES.AUTH.LOGIN)}
+								>
+									Login
+								</Button>
 							</div>
 						</form>
 					</Form>

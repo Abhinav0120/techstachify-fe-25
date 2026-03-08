@@ -5,6 +5,7 @@ import { authReducer } from '../model';
 import AuthLayout from '@/layouts/AuthLayout';
 import PublicRoute from '@/routes/PublicRoute';
 import { ExtendedStore } from '@/app/type';
+import { ROUTES } from '@/common/constants/routes';
 
 const reducerKey = 'auth';
 
@@ -25,8 +26,8 @@ const AuthRouter = () => {
 		<Routes>
 			<Route element={<PublicRoute />}>
 				<Route element={<AuthLayout />}>
-					<Route path="login" element={<LoginPage />} />
-					<Route path="register" element={<Register />} />
+					<Route path={ROUTES.AUTH.LOGIN_SEGMENT} element={<LoginPage />} />
+					<Route path={ROUTES.AUTH.REGISTER_SEGMENT} element={<Register />} />
 				</Route>
 			</Route>
 		</Routes>

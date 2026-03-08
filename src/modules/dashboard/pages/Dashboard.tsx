@@ -1,63 +1,63 @@
 import { Button } from '@/common/components/ui/button';
 import { logout } from '@/modules/auth/model/authSlice';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/common/constants/routes';
 
 type DashbaordPage = {
 	name?: string; // Optional prop
 };
 
 // Utility functions
-function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
+function debounce<T extends (...args: unknown[]) => void>(fn: T, delay: number) {
 	let timer: ReturnType<typeof setTimeout>;
-	return function (...args: Parameters<T>) {
+	return function (this: unknown, ...args: Parameters<T>) {
 		clearTimeout(timer);
-		timer = setTimeout(() => fn(...args), delay);
+		timer = setTimeout(() => fn.apply(this, args), delay);
 	};
 }
 
-function throttle<T extends (...args: any[]) => void>(fn: T, limit: number) {
+function throttle<T extends (...args: unknown[]) => void>(fn: T, limit: number) {
 	let lastCall = 0;
-	return function (...args: Parameters<T>) {
-		const now = new Date().getTime();
-		console.log('throttle called')
+	return function (this: unknown, ...args: Parameters<T>) {
+		const now = Date.now();
 		if (now - lastCall >= limit) {
 			lastCall = now;
-			fn(...args);
+			fn.apply(this, args);
 		}
 	};
 }
-
 
 const Dashboard: React.FC<DashbaordPage> = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	// Debounced navigation
-	const debouncedNavigate = useCallback(
-		debounce(() => { dispatch(logout());
-			 navigate('/auth/register')}, 1000),
-		[]
+	const debouncedNavigate = useMemo(
+		() =>
+			debounce(() => {
+				dispatch(logout());
+				navigate(ROUTES.AUTH.REGISTER);
+			}, 1000),
+		[dispatch, navigate]
 	);
 
-	// Throttled navigation
-	const throttledNavigate = useCallback(
-		throttle(() => {
-			setTimeout(()=>{
-				console.log('navigated')
-				dispatch(logout());
-				navigate('/auth/register')
-			}, 2000)
-		}, 200),
-		[]
-	)
+	const throttledNavigate = useMemo(
+		() =>
+			throttle(() => {
+				setTimeout(() => {
+					dispatch(logout());
+					navigate(ROUTES.AUTH.REGISTER);
+				}, 2000);
+			}, 200),
+		[dispatch, navigate]
+	);
 
 	return (
 		<>
 			<h1>Dashboard (Protected)</h1>
 
-			<Button onClick={() => navigate('/auth/register')}> Register </Button>
+			<Button onClick={() => navigate(ROUTES.AUTH.REGISTER)}> Register </Button>
 
 			{/* Use debounce */}
 			<Button onClick={debouncedNavigate}> Debounced Register </Button>
