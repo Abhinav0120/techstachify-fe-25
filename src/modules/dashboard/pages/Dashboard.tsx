@@ -61,7 +61,7 @@ const MODULES: ModuleCard[] = [
 		title: 'Expense Tracker',
 		description: 'Track spending with charts and analytics.',
 		icon: Wallet,
-		available: false,
+		available: true,
 	},
 	{
 		to: '/dashboard/kanban',

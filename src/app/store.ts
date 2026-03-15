@@ -3,9 +3,11 @@ import createSagaMiddleware from 'redux-saga';
 import { createReducerManager } from './rootReducer';
 import rootSaga from './rootSaga';
 import authSlice, { AuthState } from '@/modules/auth/model/authSlice';
+import type { ExpenseState } from '@/modules/expenseTracker/model/expenseSlice';
 
 export interface RootState {
 	auth: AuthState;
+	expense?: ExpenseState;
 }
 
 export const rootReducer = {

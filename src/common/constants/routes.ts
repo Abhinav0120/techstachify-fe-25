@@ -17,6 +17,14 @@ export const ROUTES = {
 	DASHBOARD: '/dashboard',
 	PROFILE: '/dashboard/profile',
 	ADMIN: '/dashboard/admin',
+	EXPENSES: {
+		BASE: '/dashboard/expenses',
+		ADD: '/dashboard/expenses/add',
+		OVERVIEW: '/dashboard/expenses/overview',
+		ADD_SEGMENT: 'add',
+		EDIT_SEGMENT: 'edit/:id',
+		OVERVIEW_SEGMENT: 'overview',
+	},
 } as const;
 
 // ---- API path segments (relative to API base URL) ----
@@ -26,6 +34,13 @@ export const API_PATHS = {
 		REGISTER: '/auth/register',
 		ME: '/auth/me',
 		PROFILE: '/auth/profile',
+	},
+	EXPENSES: {
+		BASE: '/expenses',
+		SUMMARY: '/expenses/summary',
+		BY_CATEGORY: '/expenses/by-category',
+		MONTHLY_TREND: '/expenses/monthly-trend',
+		CATEGORIES: '/expenses/categories',
 	},
 } as const;
 
