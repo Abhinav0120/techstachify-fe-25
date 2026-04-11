@@ -4,10 +4,12 @@ import { createReducerManager } from './rootReducer';
 import rootSaga from './rootSaga';
 import authSlice, { AuthState } from '@/modules/auth/model/authSlice';
 import type { ExpenseState } from '@/modules/expenseTracker/model/expenseSlice';
+import type { ChatState } from '@/modules/chatbot/types';
 
 export interface RootState {
 	auth: AuthState;
 	expense?: ExpenseState;
+	chat?: ChatState;
 }
 
 export const rootReducer = {

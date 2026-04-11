@@ -25,6 +25,7 @@ export const ROUTES = {
 		EDIT_SEGMENT: 'edit/:id',
 		OVERVIEW_SEGMENT: 'overview',
 	},
+	CHAT: '/dashboard/chat',
 } as const;
 
 // ---- API path segments (relative to API base URL) ----
@@ -41,6 +42,9 @@ export const API_PATHS = {
 		BY_CATEGORY: '/expenses/by-category',
 		MONTHLY_TREND: '/expenses/monthly-trend',
 		CATEGORIES: '/expenses/categories',
+	},
+	CHAT: {
+		BASE: '/chat',
 	},
 } as const;
 

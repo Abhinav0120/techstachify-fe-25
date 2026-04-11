@@ -14,6 +14,8 @@ const PrivateRoute = lazy(() => import('@/routes/PrivateRoute'));
 const AdminRoute = lazy(() => import('@/routes/AdminRoute'));
 const MainLayout = lazy(() => import('@/layouts/MainLayout'));
 
+const ChatRouter = lazy(() => import('@/modules/chatbot/routes/ChatRouter'));
+
 const DashboardRouter = () => {
 	useEffect(() => {
 		const reducerManager = (store as ExtendedStore).reducerManager;
@@ -31,10 +33,7 @@ const DashboardRouter = () => {
 					<Route element={<AdminRoute />}>
 						<Route path="admin" element={<AdminPage />} />
 					</Route>
-					<Route
-						path="chat"
-						element={<ComingSoonPage title="Chatbot" description="AI-powered chat. Coming soon." />}
-					/>
+					<Route path="chat/*" element={<ChatRouter />} />
 					<Route path="expenses/*" element={<ExpenseRouter />} />
 					<Route
 						path="kanban"
